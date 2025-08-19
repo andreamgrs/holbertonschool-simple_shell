@@ -27,7 +27,7 @@ int main(void)
 	size_t size = 0;
 	ssize_t read;
 	int status, cont_argv;
-	char *argv[3];
+	char *argv[100];
 	char *token;
 	pid_t child_pid;
 
@@ -46,15 +46,26 @@ int main(void)
 			exit(0);
 		}
 		line[strcspn(line, "\n")] = '\0';
-		token = strtok(line, " ");
+		token = strtok(line, " \t\r\n");
 		cont_argv = 0;
-		while (token != NULL && cont_argv < 3)
+		while (token != NULL && cont_argv < 100)
 		{
-			argv[cont_argv] = token;
-			cont_argv++;
-			token = strtok(NULL, " ");
+			if (*token != '\0')
+			{
+				argv[cont_argv] = token;
+				cont_argv++;
+			}
+
+			/**argv[cont_argv] = token;
+			cont_argv++;*/
+			token = strtok(NULL, " \t\r\n");
 		}
 		argv[cont_argv] = NULL;
+
+		if (argv[0] == NULL)
+		{
+			continue;
+		}
 
 		child_pid = fork();
 		if (child_pid == -1)
