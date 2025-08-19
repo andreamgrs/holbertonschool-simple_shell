@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <signal.h>
 #include <string.h>
+#include <limits.h>
 
 /**
  * main - first version of a super simple shell that can
@@ -17,48 +18,76 @@
  * Return: Always 0.
  */
 
-void path(char *name);
-
 void handled_sigint(int sig)
 {
 	(void)sig;
 	exit(0);
 }
 
-void path(char *name)
+/* Check if file exists and is executable */
+int check_file_exists(const char *file)
 {
-	char *value = getenv(name);
-	char *token = strtok(value, ":");
-
-	while (token != NULL && value != NULL)
+	/* X_OK: Check if the file is executable by current user*/
+	if (access(file, X_OK) == 0)
 	{
+		/* file exist and current user has execute permission */
+		return (1);
+	}
+	else
+	{
+		/* doesn't exist or not executable by user */
+		return (0);
+	}
+}
+
+/* Search for the full path of a command */
+char *check_command(char *cmd)
+{
+	char fullpath[PATH_MAX];
+	char *path_env;
+	char *path_copy;
+	char *token;
+
+	/* Check if the command contains / */
+	/* If yes, check if file exists and executable then return a copy of the command */
+	if (strchr(cmd, '/'))
+	{
+		if(check_file_exists(cmd))
+		{
+			return (strdup(cmd));
+		}
+		else
+		{
+			return (NULL);
+		}
+	}
+	/* Get the value of the path environment variable */
+	path_env = getenv("PATH");
+	if (path_env == NULL)
+	{
+		return (NULL);
+	}
+	/* Back up the PATH to not lose its value when using strtok later */
+	path_copy = strdup(path_env);
+
+	/* Tokenise the PATH by : to get each diretory */
+	token = strtok(path_copy, ":");
+
+	while (token)
+	{
+		/* Print the full path of the command */
+		snprintf(fullpath, sizeof(fullpath), "%s/%s", token, cmd);
+		
+		if (check_file_exists(fullpath))
+		{
+			free(path_copy);
+			return (strdup(fullpath));
+		}
 		token = strtok(NULL, ":");
 	}
-
+	free (path_copy);
+	return (NULL);
 }
-
-int stat(char **argv)
-{
-	struct stat st;
-	int count = 0;
-
-	while (argv[count])
-	{
-		if (stat(argv[count], &st) == 0)
-        	{
-                	printf("Found \n");
-                	return (1);
-        	}
-        	else
-        	{
-                	printf("Not found \n");
-			return (0);
-        	}
-		count++;
-	}
-	return (0);
-}
-
 
 int main(void)
 {
@@ -69,9 +98,7 @@ int main(void)
 	char *argv[100];
 	char *token;
 	pid_t child_pid;
-	int flag;
-
-	char *name = "PATH";
+	char *cmd_path; 
 
 	signal(SIGINT, handled_sigint);
 
@@ -106,32 +133,39 @@ int main(void)
 			continue;
 		}
 
-		path(name);
-		flag = stat(argv);
-
-		if (flag == 1)
+		/* Call the check_command function to get the command user typed */
+		cmd_path = check_command(argv[0]);
+		/* Check command exists */
+		if (cmd_path == NULL)
 		{
-
-			child_pid = fork();
-			if (child_pid == -1)
-	    		{
-	    			perror("Error on the fork");
-		    		return (1);
-	    		}
-			if (child_pid == 0)
-	    		{
-				if (execve(argv[0], argv, NULL) == -1)
-				{
-					perror("./shell");
-				}
-			}
-			else 
-			{
-				wait(&status);
-			}
-
+			printf("./shell_0.3: %s: Command Not Found\n", argv[0]);
+			/* do not fork, skip the rest of the code */
+			continue;
 		}
+
+		child_pid = fork();
+		if (child_pid == -1)
+		{
+			perror("Error on the fork");
+			free(cmd_path);
+			return (1);
+		}
+		if (child_pid == 0)
+		{
+			argv[0] = cmd_path;
+			if (execve(argv[0], argv, NULL) == -1)
+			{
+				perror("./shell");
+			}
+			free(cmd_path);
+		}
+		else 
+		{
+			wait(&status);
+		}
+		free(cmd_path);
 	}
+
 	free(line);
 	return (0); 
 }
