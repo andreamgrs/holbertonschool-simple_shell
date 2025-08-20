@@ -138,7 +138,8 @@ int main(void)
 		/* Check command exists */
 		if (cmd_path == NULL)
 		{
-			printf("./shell_0.3: %s: Command Not Found\n", argv[0]);
+			fprintf(stderr, "%s: %d: %s: not found\n", "./hsh", 1, argv[0]);
+			status = 127;
 			/* do not fork, skip the rest of the code */
 			continue;
 		}
