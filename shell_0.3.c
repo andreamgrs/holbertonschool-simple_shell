@@ -21,6 +21,15 @@ extern char **environ;
  * Return: Always 0.
  */
 
+void print_env()
+{
+	int cont;
+	for (cont = 0; environ[cont] != NULL; cont++)
+	{
+		printf("%s\n", environ[cont]);
+	}
+}
+
 char *_getenv(const char *name)
 {
 	int cont;
@@ -164,6 +173,11 @@ int main(void)
 		{
 			free(line);
 			exit(status);
+		}
+
+		if (strcmp(argv[0], "env") == 0)
+		{
+			print_env();
 		}
 
 		/* Call the check_command function to get the command user typed */
