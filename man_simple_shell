@@ -1,0 +1,36 @@
+.TH SHELL_NAME 1 "v1.0" "August 2025" "Simple Shell Manual"
+
+
+.SH NAME
+shell_name
+
+
+.SH DESCRIPTION
+shell_name is a simple shell that can execute commands, handle signals and search for executables in the PATH
+
+
+.SH FEATURES
+- Display a prompt (#cisfun$) and wait for user input
+- Search PATH for commands
+- Execute simple commands with arguments (e.g. ls -l)
+- Prevent calling fork() if a command does not exist
+- Properly handle Ctrl-C (SIGINT)
+
+
+.SH EXAMPLE
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.SH AUTHORS
+Written by Andrea, Carla and Dana
