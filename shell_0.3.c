@@ -163,7 +163,7 @@ int main(void)
 		if (strcmp(argv[0], "exit") == 0)
 		{
 			free(line);
-			exit(0);
+			exit(status);
 		}
 
 		/* Call the check_command function to get the command user typed */
@@ -197,6 +197,7 @@ int main(void)
 		else 
 		{
 			wait(&status);
+			status = status >> 8;
 		}
 		free(cmd_path);
 	}
