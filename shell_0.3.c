@@ -7,6 +7,9 @@
 #include <signal.h>
 #include <string.h>
 #include <limits.h>
+#include <stddef.h>
+
+extern char **environ;
 
 /**
  * main - first version of a super simple shell that can
@@ -18,11 +21,32 @@
  * Return: Always 0.
  */
 
+char *_getenv(const char *name)
+{
+	int cont;
+	char *list;
+	size_t name_len = strlen(name);
+	int value;
+
+	for (cont = 0; environ[cont] != NULL; cont++)
+	{
+		list = environ[cont];
+		value = strncmp(list, name, name_len);
+
+		if(value == 0 && list[name_len] == '=')
+		{
+			return (&list[name_len + 1]);
+		}
+	}
+	return (NULL);
+}
+
 void handled_sigint(int sig)
 {
 	(void)sig;
 	exit(0);
 }
+
 
 /* Check if file exists and is executable */
 int check_file_exists(const char *file)
@@ -43,6 +67,7 @@ int check_file_exists(const char *file)
 /* Search for the full path of a command */
 char *check_command(char *cmd)
 {
+	char *name = "PATH";
 	char fullpath[PATH_MAX];
 	char *path_env;
 	char *path_copy;
@@ -62,7 +87,7 @@ char *check_command(char *cmd)
 		}
 	}
 	/* Get the value of the path environment variable */
-	path_env = getenv("PATH");
+	path_env = _getenv(name);
 	if (path_env == NULL)
 	{
 		return (NULL);
