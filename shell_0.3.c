@@ -133,7 +133,8 @@ int main(void)
 	char *argv[100];
 	char *token;
 	pid_t child_pid;
-	char *cmd_path; 
+	char *cmd_path;
+	char *new_env[333];	
 
 	signal(SIGINT, handled_sigint);
 
@@ -201,6 +202,12 @@ int main(void)
 		}
 		if (child_pid == 0)
 		{
+			if (strchr(argv[0], '=') != NULL && argv[1] != NULL)
+			{
+				new_env[0] = argv[0];
+				execve(cmd_path, argv, new_env);
+				exit(EXIT_FAILURE);
+			}
 			argv[0] = cmd_path;
 			if (execve(argv[0], argv, NULL) == -1)
 			{
