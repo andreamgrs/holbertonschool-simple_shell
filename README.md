@@ -1,5 +1,6 @@
 ## 📁 Project Overview
 The goal of this project is to create a UNIX command-line interpreter in C that mimics the behavior of a standard shell like sh.
+
 It supports executing simple commands (e.g. ls), searching for executables in the PATH, and handling signals.
 
 
