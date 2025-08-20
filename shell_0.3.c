@@ -160,6 +160,12 @@ int main(void)
 			continue;
 		}
 
+		if (strcmp(argv[0], "exit") == 0)
+		{
+			free(line);
+			exit(0);
+		}
+
 		/* Call the check_command function to get the command user typed */
 		cmd_path = check_command(argv[0]);
 		/* Check command exists */
