@@ -119,7 +119,8 @@ int main(void)
 	char *line = NULL;
 	size_t size = 0;
 	ssize_t read;
-	int status, cont_argv;
+	int status = 0;
+	int cont_argv;
 	char *argv[100];
 	char *token;
 	pid_t child_pid;
@@ -137,7 +138,8 @@ int main(void)
 		if (read == -1)
 		{
 			free(line);
-			exit(0);
+			/* return the last status */
+			exit(status);
 		}
 		line[strcspn(line, "\n")] = '\0';
 		token = strtok(line, " \t\r\n");
@@ -163,7 +165,7 @@ int main(void)
 		/* Check command exists */
 		if (cmd_path == NULL)
 		{
-			fprintf(stderr, "%s: %d: %s: not found\n", "./hsh", 1, argv[0]);
+			fprintf(stderr, "./hsh: 1: %s: not found\n", argv[0]);
 			status = 127;
 			/* do not fork, skip the rest of the code */
 			continue;
@@ -181,9 +183,10 @@ int main(void)
 			argv[0] = cmd_path;
 			if (execve(argv[0], argv, NULL) == -1)
 			{
-				perror("./shell");
+				perror("./hsh");
+				free(cmd_path);
+				exit(EXIT_FAILURE);
 			}
-			free(cmd_path);
 		}
 		else 
 		{
@@ -193,5 +196,6 @@ int main(void)
 	}
 
 	free(line);
-	return (0); 
+	return (status);
 }
+
