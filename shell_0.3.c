@@ -27,7 +27,7 @@ void print_env()
 }
 
 /**
- * getenv - function searches the environment
+ * _getenv - function searches the environment
  * list to find the environment variable name,
  * and returns a pointer to the corresponding value string.
  *
@@ -36,7 +36,6 @@ void print_env()
  * Return: returns a pointer to the value in the
  * environment, or NULL if there is no match.
  */
-
 char *_getenv(const char *name)
 {
 	int cont;
