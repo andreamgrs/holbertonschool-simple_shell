@@ -178,6 +178,8 @@ int main(void)
 		if (strcmp(argv[0], "env") == 0)
 		{
 			print_env();
+			status = 0;
+			continue;
 		}
 
 		/* Call the check_command function to get the command user typed */
