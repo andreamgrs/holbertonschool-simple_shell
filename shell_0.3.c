@@ -238,6 +238,7 @@ int main(void)
 		else 
 		{
 			wait(&status);
+			status = status >> 8;
 		}
 		free(cmd_path);
 	}
