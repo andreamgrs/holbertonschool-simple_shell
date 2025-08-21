@@ -77,7 +77,7 @@ Then run the executable file:
 Example:
 
 	#cisfun$ ls
-	shell_0.3.c  README.md  hsh
+	simple_shell.c  README.md  hsh
 	#cisfun$ /bin/pwd
 	/home/user/simple_shell
 	#cisfun$ env

@@ -1,10 +1,10 @@
 .TH SHELL_NAME 1 "v1.0" "August 2025" "Simple Shell Manual"
 
 .SH NAME
-shell_name
+simple_shell.c
 
 .SH DESCRIPTION
-shell_name is a simple shell that can execute commands, handle signals and search for executables in the PATH
+simple_shell.c is a simple shell that can execute commands, handle signals and search for executables in the PATH
 
 .SH FEATURES
 - Display a prompt (#cisfun$) and wait for user input
@@ -17,7 +17,7 @@ shell_name is a simple shell that can execute commands, handle signals and searc
 
 .SH EXAMPLE
 #cisfun$ ls
-shell_0.3.c  README.md  hsh
+simple_shell.c  README.md  hsh
 #cisfun$ /bin/pwd
 /home/user/simple_shell
 #cisfun$ env
