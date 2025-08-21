@@ -12,13 +12,9 @@
 extern char **environ;
 
 /**
- * main - first version of a super simple shell that can
- * run commands with their full path, without any argument.
- * line: pointer where the line will be store in the buffer.
- * size: pointer to the size of the buffer.
- * stdin: get the line from the user typing.
+ * print_env - prints the environment using extern char **environ
  *
- * Return: Always 0.
+ * Return: nothing.
  */
 
 void print_env()
@@ -29,6 +25,17 @@ void print_env()
 		printf("%s\n", environ[cont]);
 	}
 }
+
+/**
+ * getenv - function searches the environment
+ * list to find the environment variable name,
+ * and returns a pointer to the corresponding value string.
+ *
+ * @name: name of the env variable. 
+ *
+ * Return: returns a pointer to the value in the
+ * environment, or NULL if there is no match.
+ */
 
 char *_getenv(const char *name)
 {
@@ -50,30 +57,50 @@ char *_getenv(const char *name)
 	return (NULL);
 }
 
+/**
+ * handled_sigint - function to handle the Ctrl + C to exit the shell.
+ * @sig: not using.
+ *
+ * Return: nothing
+ */
 void handled_sigint(int sig)
 {
 	(void)sig;
 	exit(0);
 }
 
-
-/* Check if file exists and is executable */
+/**
+ * check_file_exists - Check if file exists and is executable
+ * @file: file to evaluate. 
+ * X_OK: Check if the file is executable by current user.
+ *
+ * Return: 1 if the file exist and current user has execute
+ * permission and 0 if doesn't exist or not executable by user.
+ */
 int check_file_exists(const char *file)
 {
-	/* X_OK: Check if the file is executable by current user*/
 	if (access(file, X_OK) == 0)
 	{
-		/* file exist and current user has execute permission */
 		return (1);
 	}
 	else
 	{
-		/* doesn't exist or not executable by user */
 		return (0);
 	}
 }
-
-/* Search for the full path of a command */
+/**
+ * check_command - Search for the full path of a command.
+ * @cmd: command to evaluate.
+ *
+ * strchr()
+ * Check if the command contains / if yes, check if file
+ * exists and executable then return a copy of the command.
+ *
+ * snprintf()
+ * Print the full path of the command
+ *
+ * Return: the full path of the command.
+ */
 char *check_command(char *cmd)
 {
 	char *name = "PATH";
@@ -82,8 +109,6 @@ char *check_command(char *cmd)
 	char *path_copy;
 	char *token;
 
-	/* Check if the command contains / */
-	/* If yes, check if file exists and executable then return a copy of the command */
 	if (strchr(cmd, '/'))
 	{
 		if(check_file_exists(cmd))
@@ -95,21 +120,17 @@ char *check_command(char *cmd)
 			return (NULL);
 		}
 	}
-	/* Get the value of the path environment variable */
 	path_env = _getenv(name);
 	if (path_env == NULL)
 	{
 		return (NULL);
 	}
-	/* Back up the PATH to not lose its value when using strtok later */
 	path_copy = strdup(path_env);
 
-	/* Tokenise the PATH by : to get each diretory */
 	token = strtok(path_copy, ":");
 
 	while (token)
 	{
-		/* Print the full path of the command */
 		snprintf(fullpath, sizeof(fullpath), "%s/%s", token, cmd);
 		
 		if (check_file_exists(fullpath))
@@ -123,6 +144,13 @@ char *check_command(char *cmd)
 	return (NULL);
 }
 
+/**
+ * main - our own version of a simple shell that can
+ * run commands with their full path, with arguments.
+ * Works in interactive and non-interactive modes.
+ *
+ * Return: Always 0;
+ */
 int main(void)
 {
 	char *line = NULL;
@@ -147,7 +175,6 @@ int main(void)
 		if (read == -1)
 		{
 			free(line);
-			/* return the last status */
 			exit(status);
 		}
 		line[strcspn(line, "\n")] = '\0';
@@ -189,7 +216,6 @@ int main(void)
 		{
 			fprintf(stderr, "./hsh: 1: %s: not found\n", argv[0]);
 			status = 127;
-			/* do not fork, skip the rest of the code */
 			continue;
 		}
 
