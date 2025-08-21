@@ -119,13 +119,16 @@ char *check_command(char *cmd)
 			return (NULL);
 		}
 	}
+	/* Get the value of the path environment variable */
 	path_env = _getenv(name);
 	if (path_env == NULL)
 	{
 		return (NULL);
 	}
+	/* Back up the PATH to not lose its value when using strtok later */
 	path_copy = strdup(path_env);
 
+	/* Tokenise the PATH by : to get each diretory */
 	token = strtok(path_copy, ":");
 
 	while (token)
