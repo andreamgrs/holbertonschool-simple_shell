@@ -54,13 +54,15 @@ It supports executing simple commands (e.g. ls), searching for executables in th
 - `write` (man 2 write)
 
 ## 🔧 Programs & Functions
-- Display a prompt (#cisfun$) and wait for user input.
-- Execute simple commands with arguments (e.g. ls -l).
-- Handle the PATH to find executables without typing full paths.
-- Prevent calling fork() if a command does not exist.
-- Properly handle Ctrl-C (SIGINT):
+- Display a prompt (`#cisfun$`) and wait for user input.
+- Execute simple commands with arguments (e.g. `ls -l`).
+- Handle the `PATH` to find executables without typing full paths.
+- Prevent calling `fork()` if a command does not exist.
+- Properly handle `Ctrl-C` (`SIGINT`):
     - Does not exit the shell.
     - Prints a new prompt on a new line.
+- Exit the shell when the user enters `exit` (no arguments supported).
+- Print the current environment variables when the user enters `env`.
 
       
 ## 🛠️ Compilation & Execution
@@ -74,14 +76,14 @@ Then run the executable file:
 
 Example:
 
-	*#cisfun$ ls*
+	#cisfun$ ls
 	file1.c  file2.c  hsh
-	*#cisfun$ /bin/pwd*
+	#cisfun$ /bin/pwd
 	/home/user/simple_shell
-	*#cisfun$ env*
+	#cisfun$ env
 	PATH=/usr/local/bin:/usr/bin:/bin
 	...
-	*#cisfun$ exit*
+	#cisfun$ exit
 
 ## 👩‍💻 Authors
 - Andrea Munoz Gris
