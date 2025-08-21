@@ -1,13 +1,10 @@
 .TH SHELL_NAME 1 "v1.0" "August 2025" "Simple Shell Manual"
 
-
 .SH NAME
 shell_name
 
-
 .SH DESCRIPTION
 shell_name is a simple shell that can execute commands, handle signals and search for executables in the PATH
-
 
 .SH FEATURES
 - Display a prompt (#cisfun$) and wait for user input
@@ -18,7 +15,6 @@ shell_name is a simple shell that can execute commands, handle signals and searc
 - Exit the shell when the user enters exit (no arguments supported).
 - Print the current environment variables when the user enters env.
 
-
 .SH EXAMPLE
 #cisfun$ ls
 shell_0.3.c  README.md  hsh
@@ -28,7 +24,6 @@ shell_0.3.c  README.md  hsh
 PATH=/usr/local/bin:/usr/bin:/bin
 ...
 #cisfun$ exit
-
 
 .SH AUTHORS
 Written by Andrea Munoz Gris, Carla Ciar and Dana Le
