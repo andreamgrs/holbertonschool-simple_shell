@@ -15,22 +15,20 @@ shell_name is a simple shell that can execute commands, handle signals and searc
 - Execute simple commands with arguments (e.g. ls -l)
 - Prevent calling fork() if a command does not exist
 - Properly handle Ctrl-C (SIGINT)
+- Exit the shell when the user enters exit (no arguments supported).
+- Print the current environment variables when the user enters env.
 
 
 .SH EXAMPLE
-
-
-
-
-
-
-
-
-
-
-
-
+#cisfun$ ls
+shell_0.3.c  README.md  hsh
+#cisfun$ /bin/pwd
+/home/user/simple_shell
+#cisfun$ env
+PATH=/usr/local/bin:/usr/bin:/bin
+...
+#cisfun$ exit
 
 
 .SH AUTHORS
-Written by Andrea, Carla and Dana
+Written by Andrea Munoz Gris, Carla Ciar and Dana Le
